@@ -11,6 +11,8 @@ services:
     depends_on:
       mongodb:
         condition: service_started
+      otel-collector:
+        condition: service_started
     networks:
       - app-network
 
@@ -25,6 +27,8 @@ services:
       - "logging=promtail"
     depends_on:
       kafka:
+        condition: service_started
+      otel-collector:
         condition: service_started
     networks:
       - app-network
@@ -42,6 +46,8 @@ services:
       mongodb:
         condition: service_started
       kafka:
+        condition: service_started
+      otel-collector:
         condition: service_started
     networks:
       - app-network
@@ -82,6 +88,7 @@ services:
       - ./grafana/provisioning:/etc/grafana/provisioning
     depends_on:
       - loki
+      - tempo
     networks:
       - app-network
 
@@ -137,6 +144,30 @@ services:
     ports:
       - "5173:80"
     container_name: web
+    networks:
+      - app-network
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel-collector
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+    volumes:
+      - ./otel/otel-collector-config.yml:/etc/otelcol-contrib/config.yaml
+    depends_on:
+      - tempo
+    networks:
+      - app-network
+
+  tempo:
+    image: grafana/tempo:latest
+    container_name: tempo
+    ports:
+      - "3200:3200"
+    volumes:
+      - ./tempo/tempo-config.yml:/etc/tempo/config.yaml
+    command: -config.file=/etc/tempo/config.yaml
     networks:
       - app-network
 

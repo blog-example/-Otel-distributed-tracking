@@ -17,3 +17,14 @@ kafka:
   topic:
     air-quality: air-quality-topic
     air-quality-dlt: air-quality-topic.DLT
+
+otel:
+  exporter:
+    otlp:
+      endpoint: http://otel-collector:4318
+  logs:
+    exporter: none
+  metrics:
+    exporter: none
+  service:
+    name: server-bb

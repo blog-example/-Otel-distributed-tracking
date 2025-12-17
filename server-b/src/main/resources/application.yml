@@ -13,3 +13,14 @@ spring:
 kafka:
   topic:
     air-quality: air-quality-topic
+
+otel:
+  exporter:
+    otlp:
+      endpoint: http://otel-collector:4318
+  logs:
+    exporter: none
+  metrics:
+    exporter: none
+  service:
+    name: server-b

@@ -7,3 +7,15 @@ spring:
   data:
     mongodb:
       uri: mongodb://root:root@mongodb:27017/server-a?authSource=admin
+
+# application.yml
+otel:
+  exporter:
+    otlp:
+      endpoint: http://otel-collector:4318
+  logs:
+    exporter: none
+  metrics:
+    exporter: none
+  service:
+    name: server-a

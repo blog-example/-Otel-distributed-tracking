@@ -46,6 +46,7 @@ button:disabled {
 
 pre {
   background-color: #1a1a1a;
+  color: #e0e0e0;
   padding: 1rem;
   border-radius: 8px;
   text-align: left;
