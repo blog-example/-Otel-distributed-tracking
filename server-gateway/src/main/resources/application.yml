@@ -1,0 +1,39 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: server-gateway
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+      routes:
+        - id: server-a
+          uri: http://server-a:8081
+          predicates:
+            - Path=/api/a/**
+        - id: server-b
+          uri: http://server-b:8082
+          predicates:
+            - Path=/api/b/**
+
+otel:
+  exporter:
+    otlp:
+      endpoint: http://otel-collector:4318
+  logs:
+    exporter: none
+  metrics:
+    exporter: none
+  service:
+    name: server-gateway

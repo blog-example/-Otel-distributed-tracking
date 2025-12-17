@@ -1,4 +1,19 @@
 services:
+  server-gateway:
+    build:
+      context: ./server-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    container_name: server-gateway
+    labels:
+      - "logging=promtail"
+    depends_on:
+      otel-collector:
+        condition: service_started
+    networks:
+      - app-network
+
   server-a:
     build:
       context: ./server-a
@@ -117,7 +132,7 @@ services:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui
     ports:
-      - "8080:8080"
+      - "9090:8080"
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
