@@ -9,7 +9,8 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "*"
+            allowedOriginPatterns: "*"
+            allowCredentials: false
             allowedMethods:
               - GET
               - POST
@@ -26,6 +27,10 @@ spring:
           uri: http://server-b:8082
           predicates:
             - Path=/api/b/**
+        - id: otel-collector
+          uri: http://otel-collector:4318
+          predicates:
+            - Path=/v1/traces
 
 otel:
   exporter:

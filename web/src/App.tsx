@@ -16,7 +16,8 @@ const sampleRequest = {
 function App() {
   const [responseA, setResponseA] = useState<string>('')
   const [responseB, setResponseB] = useState<string>('')
-  const [loading, setLoading] = useState<{ a: boolean; b: boolean }>({ a: false, b: false })
+  const [responseError, setResponseError] = useState<string>('')
+  const [loading, setLoading] = useState<{ a: boolean; b: boolean; error: boolean }>({ a: false, b: false, error: false })
 
   const callServerA = async () => {
     setLoading(prev => ({ ...prev, a: true }))
@@ -52,6 +53,23 @@ function App() {
     }
   }
 
+  const callErrorApi = async () => {
+    setLoading(prev => ({ ...prev, error: true }))
+    try {
+      const res = await fetch(`${API_BASE}/api/a/not-exist-endpoint`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sampleRequest)
+      })
+      const data = await res.json()
+      setResponseError(JSON.stringify(data, null, 2))
+    } catch (err) {
+      setResponseError(`Error: ${err}`)
+    } finally {
+      setLoading(prev => ({ ...prev, error: false }))
+    }
+  }
+
   return (
     <div className="container">
       <h1>Air Quality API Tester</h1>
@@ -69,6 +87,13 @@ function App() {
             {loading.b ? 'Loading...' : 'Call Server B (Kafka)'}
           </button>
           <pre>{responseB || 'No response yet'}</pre>
+        </div>
+
+        <div className="api-section">
+          <button onClick={callErrorApi} disabled={loading.error} style={{ backgroundColor: '#dc3545' }}>
+            {loading.error ? 'Loading...' : 'Call Error API (404)'}
+          </button>
+          <pre>{responseError || 'No response yet'}</pre>
         </div>
       </div>
     </div>
