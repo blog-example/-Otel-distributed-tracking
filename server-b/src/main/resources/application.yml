@@ -1,0 +1,15 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: server-b
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: server-b-group
+      auto-offset-reset: earliest
+
+kafka:
+  topic:
+    air-quality: air-quality-topic

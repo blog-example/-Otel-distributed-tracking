@@ -1,0 +1,19 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: server-bb
+  data:
+    mongodb:
+      uri: mongodb://root:root@mongodb:27017/server-bb?authSource=admin
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: server-bb-group
+      auto-offset-reset: earliest
+
+kafka:
+  topic:
+    air-quality: air-quality-topic
+    air-quality-dlt: air-quality-topic.DLT
